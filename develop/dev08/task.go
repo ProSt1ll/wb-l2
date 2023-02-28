@@ -35,9 +35,11 @@ import (
 
 */
 
+//функция обработки команд
 func CoamndHandleer(stringCommand string) string {
 	var id uintptr
 	var res string
+	//при наличии флага -d создается daemon процесс
 	daemon := strings.Contains(stringCommand, "-d")
 	if daemon {
 		stringCommand = strings.Replace(stringCommand, "-d", "", 1)
@@ -52,7 +54,7 @@ func CoamndHandleer(stringCommand string) string {
 	}
 
 	switch strings.Split(stringCommand, " ")[0] {
-
+	//в зависимости от парсинга выбираем команду
 	case "cd":
 		res = chDirCommand(stringCommand)
 	case "pwd":
@@ -75,6 +77,7 @@ func CoamndHandleer(stringCommand string) string {
 	return res
 }
 
+//функция команды директории
 func chDirCommand(stringCommand string) string {
 
 	err := os.Chdir(strings.TrimSpace(strings.Replace(stringCommand, "cd", "", 1)))
@@ -84,6 +87,7 @@ func chDirCommand(stringCommand string) string {
 	return pwdCommand()
 }
 
+//функция получение текущей директории
 func pwdCommand() string {
 	dir, err := os.Getwd()
 	if err != nil {
@@ -93,11 +97,13 @@ func pwdCommand() string {
 	return dir
 }
 
+//функция эхо
 func echoCommand(stringCommand string) string {
 	fmt.Println(strings.TrimSpace(strings.Replace(stringCommand, "echo", "", 1)))
 	return strings.TrimSpace(strings.Replace(stringCommand, "echo", "", 1))
 }
 
+//функция убийства процесса
 func killPsCommand(stringCommand string) {
 	pid, err := strconv.Atoi(strings.Replace(stringCommand, "kill ", "", 1))
 	if err != nil {
@@ -114,6 +120,7 @@ func killPsCommand(stringCommand string) {
 	fmt.Printf("Process %v killed\n", pid)
 }
 
+//функция получения запущенных процессов
 func psCommand() string {
 	c := exec.Command("ps")
 	c.Stdin = os.Stdin
@@ -129,11 +136,13 @@ func psCommand() string {
 
 }
 
+//функция выхода
 func exitCommand() {
 	fmt.Println("Exit")
 	os.Exit(0)
 }
 
+//основная функция консоли
 func CMD() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {

@@ -20,7 +20,7 @@ import (
 В результате каждое слово должно встречаться только один раз.
 Программа должна проходить все тесты. Код должен проходить проверки go vet и golint.
 */
-
+//функция проверки на анограммы с помощью мапы
 func isAnagram(word1, word2 string) bool {
 	if len(word2) != len(word1) {
 		return false
@@ -41,6 +41,7 @@ func isAnagram(word1, word2 string) bool {
 	return true
 }
 
+//сортировка
 func sort(arr []string) []string {
 	res := make([]string, len(arr))
 	copy(res, arr)
@@ -48,6 +49,7 @@ func sort(arr []string) []string {
 	return res
 }
 
+//алгоритм быстрой сортировки
 func quickSort(arr []string, lowIndex, highIndex int) {
 	if lowIndex >= highIndex {
 		return
@@ -80,6 +82,7 @@ func quickSort(arr []string, lowIndex, highIndex int) {
 
 }
 
+//функция создания множества
 func uniqueStrs(s []string) []string {
 	strs := make(map[string]int)
 	sOut := make([]string, 0, cap(s))

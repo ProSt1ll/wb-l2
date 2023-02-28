@@ -18,7 +18,7 @@ import (
 Программа должна корректно обрабатывать ошибки библиотеки: распечатывать их в STDERR и возвращать ненулевой код выхода в OS.
 Программа должна проходить проверки go vet и golint.
 */
-
+//getTimeNow функция получения времени с помощью пакета ntp
 func getTimeNow() (time.Time, error) {
 	t, err := ntp.Time("0.beevik-ntp.pool.ntp.org")
 	return t, err

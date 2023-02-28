@@ -35,6 +35,7 @@ type Comparator interface {
 
 type CompareDefault struct{}
 
+//метод дефолтного компоратора
 func (c *CompareDefault) compare(a, b string, f flags) int {
 	a = strings.ToLower(a)
 	b = strings.ToLower(b)
@@ -49,6 +50,7 @@ func (c *CompareDefault) compare(a, b string, f flags) int {
 
 type CompareColumn struct{}
 
+//метод компоратора сравнивания строк
 func (c *CompareColumn) compare(a, b string, f flags) int {
 
 	as := strings.Split(a, " ")[f.k-1]
@@ -90,6 +92,7 @@ func (c *CompareColumn) compare(a, b string, f flags) int {
 
 type CompareInt struct{}
 
+//метод компоратора сравнинвания чисел
 func (c *CompareInt) compare(a, b string, f flags) int {
 
 	as := strings.Split(a, " ")
@@ -170,6 +173,7 @@ func Sort(arr []string, flags flags) []string {
 	return res
 }
 
+//функция переворачивания строки
 func reverseString(s []string) []string {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
 		s[i], s[j] = s[j], s[i]
@@ -177,6 +181,7 @@ func reverseString(s []string) []string {
 	return s
 }
 
+//функция создания множества
 func uniqueStrs(s []string) []string {
 	strs := make(map[string]int)
 	res := make([]string, 0, cap(s))
@@ -189,6 +194,7 @@ func uniqueStrs(s []string) []string {
 	return res
 }
 
+//алгоритм быстрой сортировки
 func quickSort(arr []string, lowIndex, highIndex int, fl flags, cmp Comparator) {
 	if lowIndex >= highIndex {
 		return
@@ -221,6 +227,7 @@ func quickSort(arr []string, lowIndex, highIndex int, fl flags, cmp Comparator) 
 
 }
 
+//инициализация флагов
 func flagsInit() *flags {
 	f := new(flags)
 	flag.StringVar(&f.i, "i", "./input.txt", "input file")
@@ -232,6 +239,7 @@ func flagsInit() *flags {
 	return f
 }
 
+//чтение файла
 func readFile(path string) []string {
 	file, err := os.Open(path)
 	if err != nil {
@@ -243,7 +251,7 @@ func readFile(path string) []string {
 	for scanner.Scan() {
 		strs = append(strs, scanner.Text())
 	}
-	if err := scanner.Err(); err != nil {
+	if err = scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
 	return strs

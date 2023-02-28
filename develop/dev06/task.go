@@ -26,6 +26,7 @@ type flags struct {
 	separated bool
 }
 
+//инициализация флагов
 func flagsInit() flags {
 	fl := flags{}
 	flag.IntVar(&fl.fields, "f", 0, "'fields' - выбрать поля (колонки)")
@@ -56,6 +57,8 @@ func main() {
 	str := Cut(string(file), fl)
 	fmt.Println(str)
 }
+
+//функция разбивки строк по столбцам
 func Cut(text string, fl flags) string {
 	var temp string
 	//сплитим файл по строкам, а потом используем cut для каждой из них
@@ -69,6 +72,7 @@ func Cut(text string, fl flags) string {
 	return temp[1:]
 }
 
+//поиск определенного столбца в строке
 func findInLine(str string, fl flags) (string, bool) {
 	// ПРоверка на флаг -s, пропускаем строки без разделителя
 	if fl.separated && !strings.Contains(str, fl.delimiter) {

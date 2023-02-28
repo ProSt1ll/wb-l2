@@ -33,7 +33,7 @@ func Unpack(input string) (string, error) {
 	}
 
 	runes := []rune(input)
-	//проверка на валидность
+	//проверка на валидность строки
 	isDig := true
 	for i := 0; i < len(runes); i++ {
 		if isDig && unicode.IsDigit(runes[i]) {
@@ -44,6 +44,7 @@ func Unpack(input string) (string, error) {
 
 	res := make([]rune, 0)
 	var prev rune
+	//алгоритм распаковки
 	for _, r := range input {
 		//если буква - пишем
 		if unicode.IsLetter(r) {

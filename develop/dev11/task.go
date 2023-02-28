@@ -46,10 +46,6 @@ func main() {
 	storeServer := handler.NewServer(store)
 	configureRoutes(serveMux, storeServer)
 
-	//serveMux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	//	http.ServeFile(w, r, "./tmpl/index.html")
-	//})
-
 	login := middleware.Logging(serveMux)
 
 	log.Fatal(http.ListenAndServe("localhost:8080", login))

@@ -13,7 +13,7 @@ import (
 func NewServer(store *service.Calendar) *Server {
 	return &Server{store: store}
 }
-
+//обработка запроса создания ивента
 func (ss *Server) HandlerCreateEvent(w http.ResponseWriter, r *http.Request) {
 	_, date, mes, err := handlerDataPost(r)
 	if err != nil {
@@ -25,6 +25,7 @@ func (ss *Server) HandlerCreateEvent(w http.ResponseWriter, r *http.Request) {
 	writeResponse(w, id)
 }
 
+//обработка запроса обнавления ивента
 func (ss *Server) HandlerUpdateEvent(w http.ResponseWriter, r *http.Request) {
 	id, date, mes, err := handlerDataPost(r)
 	if err != nil {
@@ -41,6 +42,7 @@ func (ss *Server) HandlerUpdateEvent(w http.ResponseWriter, r *http.Request) {
 	writeResponse(w, event)
 }
 
+//обработка запроса удаления ивента
 func (ss *Server) HandlerDeleteEvent(w http.ResponseWriter, r *http.Request) {
 	id, _, _, err := handlerDataPost(r)
 	if err != nil {
@@ -57,6 +59,7 @@ func (ss *Server) HandlerDeleteEvent(w http.ResponseWriter, r *http.Request) {
 	writeResponse(w, "Element deleted")
 }
 
+//обработка запроса ивента на день
 func (ss *Server) HandlerEventsForDay(w http.ResponseWriter, r *http.Request) {
 
 	date := handlerDataGet(r)
@@ -72,6 +75,7 @@ func (ss *Server) HandlerEventsForDay(w http.ResponseWriter, r *http.Request) {
 	writeResponse(w, events)
 }
 
+//обработка запроса ивента на неделю
 func (ss *Server) HandlerEventsForWeek(w http.ResponseWriter, r *http.Request) {
 	date := handlerDataGet(r)
 
@@ -85,7 +89,7 @@ func (ss *Server) HandlerEventsForWeek(w http.ResponseWriter, r *http.Request) {
 	}
 	writeResponse(w, events)
 }
-
+//обработка запроса ивента на месяц
 func (ss *Server) HandlerEventsForMonth(w http.ResponseWriter, r *http.Request) {
 	date := handlerDataGet(r)
 
@@ -100,6 +104,7 @@ func (ss *Server) HandlerEventsForMonth(w http.ResponseWriter, r *http.Request) 
 	writeResponse(w, events)
 }
 
+//обработчик запроса POST
 func handlerDataPost(r *http.Request) (int, time.Time, string, error) {
 	var id int
 	var date time.Time
@@ -129,6 +134,7 @@ func handlerDataPost(r *http.Request) (int, time.Time, string, error) {
 	return id, date, mes, nil
 }
 
+// обработчик запроса GET
 func handlerDataGet(r *http.Request) time.Time {
 	dateF := r.FormValue("date") + "T00:00:00Z"
 	date, err := time.Parse(time.RFC3339, dateF)
@@ -138,6 +144,7 @@ func handlerDataGet(r *http.Request) time.Time {
 	return date
 }
 
+//Вспомогательная функция сериализация объектов JSON
 func writeResponse(w http.ResponseWriter, v interface{}) {
 	resultJSON := struct {
 		Result interface{}

@@ -29,7 +29,6 @@ func LinkParser(url string) []string {
 	var links []string
 
 	//Ищем и записываем все ссылки на странице
-
 	doc.Find("body a, link,head").Each(func(index int, item *goquery.Selection) {
 		linkTag := item
 		link, _ := linkTag.Attr("href")
@@ -37,15 +36,18 @@ func LinkParser(url string) []string {
 	})
 	return links
 }
-func downloadResources(path string, url string) error {
-	//Get the response bytes from the url
+
+//функция скачивания документа
+func downloadDocument(path string, url string) error {
+	//сплитим для выделения названия и пути сохранения
 	filepath := strings.Split(url, "/")
 	if len(filepath[len(filepath)-1]) == 0 {
 		return nil
 	}
-
+	//пытаемся скачать абсолютную ссылку
 	response, err := http.Get(url)
 	if err != nil {
+		//относительную
 		response, err = http.Get("https://" + path + "/" + url)
 		if err != nil {
 			return err
@@ -58,15 +60,17 @@ func downloadResources(path string, url string) error {
 		return nil
 	}
 	temp := "download/" + path + "/"
+	//склеиваем пусть сохранения
 	for i := 3; i < len(filepath)-2; i++ {
 		temp += filepath[i] + "/"
 	}
+	//создаем директорию
 	err = os.MkdirAll(temp, 0777)
 	if err != nil {
 		fmt.Println(err)
 	}
-	//Create a empty file
 
+	//создаем файл
 	file, err := os.Create(temp + filepath[len(filepath)-1])
 	if err != nil {
 		return err
@@ -74,7 +78,7 @@ func downloadResources(path string, url string) error {
 
 	defer file.Close()
 
-	//Write the bytes to the fiel
+	//и копируем туда
 	_, err = io.Copy(file, response.Body)
 	if err != nil {
 		return err
@@ -85,7 +89,7 @@ func downloadResources(path string, url string) error {
 
 //Скачиваем все файлы с сайта
 func downloadFromPage(path string, url string) {
-	err := downloadResources(path, url)
+	err := downloadDocument(path, url)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -93,7 +97,7 @@ func downloadFromPage(path string, url string) {
 	links := LinkParser(url)
 	//Для каждой из них создаем свой файл
 	for _, l := range links {
-		err := downloadResources(path, l)
+		err = downloadDocument(path, l)
 		if err != nil {
 			log.Fatal(err)
 		}

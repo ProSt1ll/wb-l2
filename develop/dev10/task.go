@@ -32,12 +32,14 @@ func main() {
 	exitChan := make(chan os.Signal, 1)
 	//При нажатии ctrl + D (SIGQUIT) в канал sigCh будет отправлено сообщение
 	signal.Notify(exitChan, syscall.SIGQUIT)
+	//горутинка функции выхода
 	go Exit(exitChan)
 
-	//Устанавливаем флаги на задержку и иргументы на хост и порт
+	//Устанавливаем флаги на задержку и аргументы на хост и порт
 	timeout := flag.String("timeout", "10s", "timeout for a connection")
 	flag.Parse()
 	if len(flag.Args()) == 0 {
+		fmt.Println("Example: task.go host port")
 		return
 	}
 	//Переводим задержку в нужный формат
@@ -53,6 +55,7 @@ func main() {
 	start = start.Add(timeoutDuration)
 	// Подключаемся к сокету. Задаем таймаут подключения
 	var conn net.Conn
+	fmt.Printf("Пытаемся подключится к %s:%s...\n", host, port)
 	for start.After(time.Now()) {
 		conn, err = net.DialTimeout("tcp", hostPort, timeoutDuration)
 		if err != nil {
@@ -64,8 +67,10 @@ func main() {
 		fmt.Println("Ошибка подключения к ", hostPort)
 		return
 	}
+	fmt.Println("Соединение с сервером установлено.")
 	defer conn.Close()
 
+	//горутинка печати ответа с сервера
 	go func() {
 		reader := bufio.NewReader(conn)
 		for {
